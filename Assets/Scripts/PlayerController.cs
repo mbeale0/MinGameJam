@@ -48,8 +48,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    
+    public void takeDamage()
+    {
+        //TODO: Lose
+    }   
 
     
 }

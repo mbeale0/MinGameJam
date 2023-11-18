@@ -6,7 +6,11 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private GameObject attackRadius = null;
     [SerializeField] private GameObject smoke = null;
-    private float speed = 3.5f;
+    public GameObject fireball;
+    public float speed;
+    public bool isRobot;
+    public float fireballTime;
+    private float fireballTimer;
     private Transform target = null;
     private bool attacking = false;
     private int numberOfKittensAttacking = 0;
@@ -33,7 +37,6 @@ public class EnemyController : MonoBehaviour
         }
         if (!isBeingAttacked && attacking)
         {
-
             //rotate to look at the player
             transform.LookAt(target.position);
             transform.Rotate(new Vector3(0, -90, 0), Space.Self);
@@ -41,6 +44,12 @@ public class EnemyController : MonoBehaviour
             //move towards the player
             if (Vector3.Distance(transform.position, target.position) > 2f)
             {
+                fireballTimer -= Time.deltaTime;
+                if (isRobot && fireballTimer < 0)
+                {
+                    Instantiate(fireball, transform.position, transform.rotation);
+                    fireballTimer = fireballTime;
+                }
                 transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
             }
         }
@@ -104,6 +113,11 @@ public class EnemyController : MonoBehaviour
                 smoke.SetActive(true);
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
+        }
+
+        else if (other.gameObject.CompareTag("Player"))
+        {
+            other.gameObject.GetComponent<PlayerController>().takeDamage();
         }
 
     }
