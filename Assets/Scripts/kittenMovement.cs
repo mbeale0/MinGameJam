@@ -7,9 +7,12 @@ public class kittenMovement : MonoBehaviour
     // Start is called before the first frame update
     public int state;
     // State:
-    //0: following cat
-    //1: thrown
-    //2: returning to cat (dead or alive)
+    //0: following alive
+    //1: returning alive
+    //2: thrown
+    //3: following dead
+    //4: returning dead
+
     public GameObject cat;
     public float followDistance;
     public float followSpeed;
@@ -30,29 +33,31 @@ public class kittenMovement : MonoBehaviour
         Vector3 vecToCat;
         switch (state)
         {
-            case 0: // follow
+            case 0:
+            case 3: // follow
                 vecToCat = cat.transform.position - transform.position;
-                if (Vector3.Magnitude(vecToCat) > followDistance)
+                if (Vector3.Magnitude(vecToCat) > followDistance + state/3)
                 {
                     transform.position += (followSpeed/60 * Vector3.Normalize(vecToCat));
                 }
                 return;
-            case 1: // throw
+            case 2: // throw
                 if (timer > 0)
                 {
                     transform.position += (throwSpeed / 60 * throwDir);
                     timer -= Time.deltaTime;
                 } else
                 {
-                    state = 2;
+                    state = 1;
                 }
                 return;
-            case 2: // return
+            case 1:
+            case 4: // return
                 vecToCat = cat.transform.position - transform.position;
                 transform.position += (returnSpeed / 60 * Vector3.Normalize(vecToCat));
                 if (Vector3.Magnitude(vecToCat) < followDistance/2)
                 {
-                    state = 0;
+                    state--;
                 }
                     return;
             default:
@@ -68,6 +73,6 @@ public class kittenMovement : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = cat.transform.position.z;
         throwDir = Vector3.Normalize(mousePos - cat.transform.position);
-        state = 1;
+        state = 2;
     }
 }
