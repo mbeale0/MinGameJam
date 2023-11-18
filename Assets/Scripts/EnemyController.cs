@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
     private bool attacking = false;
     void Start()
     {
-       target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>(); 
+       target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
     void Update()
@@ -37,5 +37,14 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         attacking = false;
     }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "kitten")
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
 
 }
