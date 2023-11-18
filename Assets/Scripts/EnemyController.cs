@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private GameObject attackRadius = null;
+    [SerializeField] private GameObject grave = null;
     [SerializeField] private Sprite smoke_0 = null;
     [SerializeField] private Sprite smoke_1 = null;
     [SerializeField] private Sprite rat = null;
@@ -30,6 +31,7 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(!isBeingAttacked && attacking);
         if (isBeingAttacked && !isInAttackCoroutine)
         {
             StartCoroutine(AttackMode());
@@ -47,13 +49,13 @@ public class EnemyController : MonoBehaviour
             transform.Rotate(new Vector3(0, -90, 0), Space.Self);
 
             //move towards the player
-                fireballTimer -= Time.deltaTime;
-                if (isRobot && fireballTimer < 0)
-                {
-                    Instantiate(fireball, transform.position, transform.rotation);
-                    fireballTimer = fireballTime;
-                }
-                transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
+            fireballTimer -= Time.deltaTime;
+            if (isRobot && fireballTimer < 0)
+            {
+                Instantiate(fireball, transform.position, transform.rotation);
+                fireballTimer = fireballTime;
+            }
+            transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
         }
     }
     private IEnumerator AttackMode()
@@ -75,6 +77,7 @@ public class EnemyController : MonoBehaviour
                     victoryKitten.GetComponent<kittenMovement>().enabled = true;
                     victoryKitten.GetComponent<SpriteRenderer>().enabled = true;
                 }
+                gameObject.GetComponent<SpriteRenderer>().enabled = false;
                 GameManager.GetComponent<GameController>().killEnemy();
                 Destroy(gameObject);
             }
@@ -82,6 +85,7 @@ public class EnemyController : MonoBehaviour
             if (kitten.GetComponent<KittenHealth>().GetHealth() <= 0)
             {                
                 kittensToKill.Add(kitten);
+                Instantiate(grave);
             }
         }
         foreach (GameObject kitten in kittensToKill)
@@ -116,7 +120,6 @@ public class EnemyController : MonoBehaviour
             isBeingAttacked = true;
             numberOfKittensAttacking++;
             kittens.Add(other.gameObject);
-            // TODO: Disable kitten controller
             other.gameObject.GetComponent<kittenMovement>().enabled = false;
             other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             other.gameObject.transform.position = gameObject.transform.position;

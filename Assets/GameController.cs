@@ -8,6 +8,11 @@ public class GameController : MonoBehaviour
     public int numEnemies;
     public int numChests;
 
+    void Start()
+    {
+        numEnemies = GameObject.FindGameObjectsWithTag("Rat").Length;
+    }
+
     public void killEnemy()
     {
         numEnemies--;

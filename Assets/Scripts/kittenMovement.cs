@@ -5,6 +5,7 @@ using UnityEngine;
 public class kittenMovement : MonoBehaviour
 {
     // Start is called before the first frame update
+    
     public int state;
     // State:
     //0: following alive
