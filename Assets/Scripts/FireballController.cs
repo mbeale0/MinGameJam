@@ -25,7 +25,7 @@ public class FireballController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Player"))
         {
-            //collision.gameObject.GetComponent<PlayerController>().takeDamage();
+            collision.gameObject.GetComponent<PlayerController>().takeDamage();
         }
         Destroy(gameObject);
     }

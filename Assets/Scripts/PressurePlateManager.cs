@@ -27,6 +27,8 @@ public class PressurePlateManager : MonoBehaviour
                 foreach(GameObject kitten in kittens){
                     kitten.SetActive(true);
                 }
+                doorToOpen.GetComponent<SpriteRenderer>().enabled = true;
+                doorToOpen.GetComponent<BoxCollider2D>().enabled = false;
             }
         }
     }

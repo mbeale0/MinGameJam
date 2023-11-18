@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject attackRadius = null;
     [SerializeField] private GameObject smoke = null;
     public GameObject fireball;
+    public GameObject GameManager;
     public float speed;
     public bool isRobot;
     public float fireballTime;
@@ -42,8 +43,6 @@ public class EnemyController : MonoBehaviour
             transform.Rotate(new Vector3(0, -90, 0), Space.Self);
 
             //move towards the player
-            if (Vector3.Distance(transform.position, target.position) > 2f)
-            {
                 fireballTimer -= Time.deltaTime;
                 if (isRobot && fireballTimer < 0)
                 {
@@ -51,7 +50,6 @@ public class EnemyController : MonoBehaviour
                     fireballTimer = fireballTime;
                 }
                 transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
-            }
         }
     }
     private IEnumerator AttackMode()
@@ -68,6 +66,7 @@ public class EnemyController : MonoBehaviour
                 {
                    victoryKitten.GetComponent<kittenMovement>().enabled = true;
                 }
+                GameManager.GetComponent<GameController>().killEnemy();
                 Destroy(gameObject);
             }
             kitten.GetComponent<KittenHealth>().SetHealth(kitten.GetComponent<KittenHealth>().GetHealth() - Random.Range(1.5f, 3.6f));

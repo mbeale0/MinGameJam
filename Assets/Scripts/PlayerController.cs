@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private GameObject[] kittens = new GameObject[5];
     public GameObject kitten;
+    public GameObject gameController;
 
     private void Start()
     {
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
     }
     public void takeDamage()
     {
-        //TODO: Lose
+        gameController.GetComponent<GameController>().lose();
     }   
 
     
