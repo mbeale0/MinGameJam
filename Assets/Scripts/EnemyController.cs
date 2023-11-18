@@ -55,17 +55,21 @@ public class EnemyController : MonoBehaviour
             health -= Random.Range(2.5f, 3.5f);
             if (health <= 0)
             {
+                foreach (GameObject victoryKitten in kittens)
+                {
+                   victoryKitten.GetComponent<kittenMovement>().enabled = true;
+                }
                 Destroy(gameObject);
             }
             kitten.GetComponent<KittenHealth>().SetHealth(kitten.GetComponent<KittenHealth>().GetHealth() - Random.Range(1.5f, 3.6f));
             if (kitten.GetComponent<KittenHealth>().GetHealth() <= 0)
-            {
-                kitten.gameObject.SetActive(false);
+            {                
                 kittensToKill.Add(kitten);
             }
         }
         foreach (GameObject kitten in kittensToKill)
         {
+            kitten.GetComponent<kittenMovement>().state = 4
             kittens.Remove(kitten);
             numberOfKittensAttacking--;
         }
@@ -87,12 +91,13 @@ public class EnemyController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Kitten"))
+        if (other.gameObject.CompareTag("kitten"))
         {
             isBeingAttacked = true;
             numberOfKittensAttacking++;
             kittens.Add(other.gameObject);
             // TODO: Disable kitten controller
+            other.gameObject.GetComponent<kittenMovement>().enabled = false;
             other.gameObject.transform.position = gameObject.transform.position;
             if (numberOfKittensAttacking == 1)
             {

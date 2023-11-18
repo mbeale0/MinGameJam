@@ -13,7 +13,7 @@ public class PressurePlateManager : MonoBehaviour
     private int currentKittens = 0;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.CompareTag("Kitten")){
+        if(other.gameObject.CompareTag("kitten")){
             if(currentKittens != numberOfKittensNeeded){
                 kittens.Add(other.gameObject);
                 other.gameObject.SetActive(false);
