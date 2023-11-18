@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Sprite smoke_0 = null;
     [SerializeField] private Sprite smoke_1 = null;
     [SerializeField] private Sprite rat = null;
+    [SerializeField] private Sprite ghost = null;
     
     public GameObject fireball;
     public GameObject GameManager;
@@ -70,8 +71,9 @@ public class EnemyController : MonoBehaviour
             {
                 foreach (GameObject victoryKitten in kittens)
                 {
-                   victoryKitten.GetComponent<kittenMovement>().enabled = true;
-                   gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                    victoryKitten.GetComponent<kittenMovement>().state = 1;
+                    victoryKitten.GetComponent<kittenMovement>().enabled = true;
+                    victoryKitten.GetComponent<SpriteRenderer>().enabled = true;
                 }
                 GameManager.GetComponent<GameController>().killEnemy();
                 Destroy(gameObject);
@@ -85,6 +87,9 @@ public class EnemyController : MonoBehaviour
         foreach (GameObject kitten in kittensToKill)
         {
             kitten.GetComponent<kittenMovement>().state = 4;
+            kitten.GetComponent<kittenMovement>().enabled = true;
+            kitten.GetComponent<SpriteRenderer>().sprite = ghost;
+            kitten.GetComponent<SpriteRenderer>().enabled = true;
             kittens.Remove(kitten);
             numberOfKittensAttacking--;
         }
