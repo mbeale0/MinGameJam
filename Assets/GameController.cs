@@ -27,11 +27,11 @@ public class GameController : MonoBehaviour
     {
         if (numEnemies == 0 && numChests == 0)
         {
-            SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
+            SceneManager.LoadScene("WinScreen");
         }
     }
     public void lose()
     {
-        SceneManager.SetActiveScene(SceneManager.GetSceneAt(2));
+        SceneManager.LoadScene("LossScreen");
     }
 }
