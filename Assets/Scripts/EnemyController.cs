@@ -69,7 +69,7 @@ public class EnemyController : MonoBehaviour
         }
         foreach (GameObject kitten in kittensToKill)
         {
-            kitten.GetComponent<kittenMovement>().state = 4
+            kitten.GetComponent<kittenMovement>().state = 4;
             kittens.Remove(kitten);
             numberOfKittensAttacking--;
         }
