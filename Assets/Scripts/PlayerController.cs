@@ -7,21 +7,21 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        if(Input.GetKey(KeyCode.W))
         {
-            transform.Translate(0, 1, 0);
+            transform.Translate(0, 10 * Time.deltaTime, 0);
         }
-        else if(Input.GetKeyDown(KeyCode.S))
+        else if(Input.GetKey(KeyCode.S))
         {
-            transform.Translate(0, -1, 0);
+            transform.Translate(0, -10 * Time.deltaTime, 0);
         }
-        else if(Input.GetKeyDown(KeyCode.A))
+        else if(Input.GetKey(KeyCode.A))
         {
-            transform.Translate(-1, 0, 0);
+            transform.Translate(-10 * Time.deltaTime, 0, 0);
         }
-        else if(Input.GetKeyDown(KeyCode.D))
+        else if(Input.GetKey(KeyCode.D))
         {
-            transform.Translate(1, 0, 0);
+            transform.Translate(10 * Time.deltaTime, 0, 0);
         }
     }
 
