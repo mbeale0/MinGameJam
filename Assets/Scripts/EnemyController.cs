@@ -34,8 +34,7 @@ public class EnemyController : MonoBehaviour
             //rotate to look at the player
             transform.LookAt(target.position);
             transform.Rotate(new Vector3(0,-90,0),Space.Self);
-            
-            
+                        
             //move towards the player
             if (Vector3.Distance(transform.position,target.position)>2f){
                 transform.Translate(new Vector3(speed* Time.deltaTime,0,0) );
@@ -43,25 +42,29 @@ public class EnemyController : MonoBehaviour
         }
     }
     private IEnumerator AttackMode(){
-        Debug.Log("Attack!");
         isInAttackCoroutine = true;
+        yield return new WaitForSeconds(.75f);
+        List<GameObject> kittensToKill = new();
         foreach(GameObject kitten in kittens){
-            health -= Random.Range(2.5f, 6.5f);
-            if(health == 0){
-
+            health -= Random.Range(2.5f, 3.5f);
+            if(health <= 0){
                 Destroy(gameObject);
             }
-            kitten.GetComponent<KittenHealth>().SetHealth(kitten.GetComponent<KittenHealth>().GetHealth() - Random.Range(3.5f, 7.01f));
-            if(kitten.GetComponent<KittenHealth>().GetHealth() == 0){
-                Destroy(kitten);
-                kittens.Remove(kitten);
+            kitten.GetComponent<KittenHealth>().SetHealth(kitten.GetComponent<KittenHealth>().GetHealth() - Random.Range(1.5f, 3.6f));
+            if(kitten.GetComponent<KittenHealth>().GetHealth() <= 0){
+                kitten.gameObject.SetActive(false);
+                kittensToKill.Add(kitten);                
             }        
+        }
+        foreach(GameObject kitten in kittensToKill){
+            kittens.Remove(kitten);
+            numberOfKittensAttacking--;
         }
         if(kittens.Count == 0){
             isBeingAttacked = false;
+            smoke.SetActive(false);
             gameObject.GetComponent<SpriteRenderer>().enabled = true;
         }
-        yield return new WaitForSeconds(Random.Range(.1f, .4f));
         isInAttackCoroutine = false;
     }
 
@@ -76,6 +79,8 @@ public class EnemyController : MonoBehaviour
             isBeingAttacked = true;
             numberOfKittensAttacking++;
             kittens.Add(other.gameObject);
+            // TODO: Disable kitten controller
+            other.gameObject.transform.position = gameObject.transform.position;
             if(numberOfKittensAttacking == 1){
                 smoke.SetActive(true);
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
