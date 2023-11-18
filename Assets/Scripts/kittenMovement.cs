@@ -21,20 +21,20 @@ public class kittenMovement : MonoBehaviour
     public float throwTime;
     private float timer;
     private Vector3 throwDir;
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    private bool isWalking = false;
+    private bool inWalkingAnimation = false;
     void Update()
     {
+        if(isWalking && !inWalkingAnimation){
+            inWalkingAnimation = true;
+            StartCoroutine(AnimateWalking());
+        }
         Vector3 vecToCat;
         switch (state)
         {
             case 0:
             case 3: // follow
+                isWalking = true;
                 vecToCat = cat.transform.position - transform.position;
                 if (Vector3.Magnitude(vecToCat) > followDistance + state/3)
                 {
@@ -42,6 +42,7 @@ public class kittenMovement : MonoBehaviour
                 }
                 return;
             case 2: // throw
+                isWalking = false;
                 if (timer > 0)
                 {
                     transform.position += (throwSpeed / 60 * throwDir);
@@ -55,12 +56,14 @@ public class kittenMovement : MonoBehaviour
             case 4: // return
                 vecToCat = cat.transform.position - transform.position;
                 transform.position += (returnSpeed / 60 * Vector3.Normalize(vecToCat));
+                isWalking = true;
                 if (Vector3.Magnitude(vecToCat) < followDistance/2)
                 {
                     state--;
                 }
                     return;
             default:
+                isWalking = false;
                 Debug.LogError("Invalid state: " + state);
                 return;
         }
@@ -74,5 +77,12 @@ public class kittenMovement : MonoBehaviour
         mousePos.z = cat.transform.position.z;
         throwDir = Vector3.Normalize(mousePos - cat.transform.position);
         state = 2;
+    }
+    private IEnumerator AnimateWalking(){
+        gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x, .35f, 1);
+        yield return new WaitForSeconds(.2f);
+        gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x, .5f, 1);
+        yield return new WaitForSeconds(.2f);
+        inWalkingAnimation = false;
     }
 }

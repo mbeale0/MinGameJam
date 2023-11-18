@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private Sprite walkRight = null;
+    [SerializeField] private Sprite walkLeft = null;
+    [SerializeField] private Sprite standing = null;
     private GameObject[] kittens = new GameObject[5];
     public GameObject kitten;
     public GameObject gameController;
+    private bool isMoving = false;
+    private bool inWalkingAnimation = false;
 
     private void Start()
     {
@@ -20,21 +25,33 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if(isMoving && !inWalkingAnimation){
+            inWalkingAnimation = true;
+            StartCoroutine(AnimateWalking());
+        }
         if(Input.GetKey(KeyCode.W))
         {
+            isMoving = true;
             transform.Translate(0, 10 * Time.deltaTime, 0);
         }
         else if(Input.GetKey(KeyCode.S))
         {
+            isMoving = true;
             transform.Translate(0, -10 * Time.deltaTime, 0);
         }
         else if(Input.GetKey(KeyCode.A))
         {
+            isMoving = true;
             transform.Translate(-10 * Time.deltaTime, 0, 0);
         }
         else if(Input.GetKey(KeyCode.D))
         {
+            isMoving = true;
             transform.Translate(10 * Time.deltaTime, 0, 0);
+        }
+        else{
+            isMoving = false;
+            GetComponent<SpriteRenderer>().sprite = standing;
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -54,5 +71,12 @@ public class PlayerController : MonoBehaviour
         gameController.GetComponent<GameController>().lose();
     }   
 
+    private IEnumerator AnimateWalking(){
+        GetComponent<SpriteRenderer>().sprite = walkRight;
+        yield return new WaitForSeconds(.2f);
+        GetComponent<SpriteRenderer>().sprite = walkLeft;
+        yield return new WaitForSeconds(.2f);
+        inWalkingAnimation = false;
+    }
     
 }

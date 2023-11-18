@@ -5,7 +5,10 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private GameObject attackRadius = null;
-    [SerializeField] private GameObject smoke = null;
+    [SerializeField] private Sprite smoke_0 = null;
+    [SerializeField] private Sprite smoke_1 = null;
+    [SerializeField] private Sprite rat = null;
+    
     public GameObject fireball;
     public GameObject GameManager;
     public float speed;
@@ -55,7 +58,10 @@ public class EnemyController : MonoBehaviour
     private IEnumerator AttackMode()
     {
         isInAttackCoroutine = true;
-        yield return new WaitForSeconds(.75f);
+        GetComponent<SpriteRenderer>().sprite = smoke_0;
+        yield return new WaitForSeconds(.25f);
+        GetComponent<SpriteRenderer>().sprite = smoke_1;
+        yield return new WaitForSeconds(.5f);
         List<GameObject> kittensToKill = new();
         foreach (GameObject kitten in kittens)
         {
@@ -65,6 +71,7 @@ public class EnemyController : MonoBehaviour
                 foreach (GameObject victoryKitten in kittens)
                 {
                    victoryKitten.GetComponent<kittenMovement>().enabled = true;
+                   gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 }
                 GameManager.GetComponent<GameController>().killEnemy();
                 Destroy(gameObject);
@@ -84,7 +91,7 @@ public class EnemyController : MonoBehaviour
         if (kittens.Count == 0)
         {
             isBeingAttacked = false;
-            smoke.SetActive(false);
+            GetComponent<SpriteRenderer>().sprite = rat;
             gameObject.GetComponent<SpriteRenderer>().enabled = true;
         }
         isInAttackCoroutine = false;
@@ -106,11 +113,11 @@ public class EnemyController : MonoBehaviour
             kittens.Add(other.gameObject);
             // TODO: Disable kitten controller
             other.gameObject.GetComponent<kittenMovement>().enabled = false;
+            other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             other.gameObject.transform.position = gameObject.transform.position;
             if (numberOfKittensAttacking == 1)
             {
-                smoke.SetActive(true);
-                gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                GetComponent<SpriteRenderer>().sprite = smoke_0;
             }
         }
 
